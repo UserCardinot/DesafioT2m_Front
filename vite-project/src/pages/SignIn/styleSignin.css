@@ -122,11 +122,8 @@
     margin-top: 10px;
     margin-bottom: 15px;
     height: auto;
-    /* Deixa a altura das tarefas adaptável */
     max-height: 300px;
-    /* Limita a altura máxima para evitar que as tarefas saiam da tela */
     overflow-y: auto;
-    /* Adiciona scroll caso o conteúdo ultrapasse o limite */
 }
 
 .task-item {
@@ -152,22 +149,15 @@
     color: #007bff;
 }
 
-/* Fixando o botão de "Cadastrar novo projeto" no canto inferior direito */
 .button-container {
     margin-top: 20px;
     position: fixed;
-    /* Fixa o botão na parte inferior */
     bottom: 20px;
-    /* Distância do rodapé */
     right: 20px;
-    /* Posiciona à direita */
     width: auto;
-    /* Largura automática para o botão */
     max-width: 250px;
-    /* Limita a largura máxima do botão */
 }
 
 .buttonPress {
     background-color: #007bff;
-    /* Mantém a cor azul do botão */
 }

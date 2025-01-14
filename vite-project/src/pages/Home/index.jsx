@@ -74,7 +74,7 @@ export default function Home() {
 
     const handleExcluir = async (id) => {
         try {
-            await axios.delete(`http://localhost:7192/api/projeto/${id}`, {
+            await axios.delete(`https://localhost:7192/api/projeto/${id}`, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },

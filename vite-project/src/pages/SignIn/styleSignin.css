@@ -1,148 +1,173 @@
-body,
-html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
+.PageContainer {
     font-family: 'Arial', sans-serif;
-}
-
-.page-container {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    /* Alinha o conteúdo ao topo */
     align-items: center;
     background-color: #f4f7fc;
     padding: 20px;
     min-height: 100vh;
-    box-sizing: border-box;
+    position: relative;
+    /* Garante que o conteúdo principal não sobreponha o botão fixo */
 }
 
-.page-header {
+.PageHeaderContainer {
+    width: 100%;
     background-color: #013d32;
     color: white;
-    padding: 20px 30px;
-    border-radius: 20px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    font-size: 36px;
-    letter-spacing: 1px;
-    margin-bottom: 20px;
-    width: 100%;
-    max-width: 600px;
-}
-
-.page-header::after {
-    content: '';
-    display: block;
-    width: 50px;
-    height: 5px;
-    background-color: #f8f9fa;
-    margin: 10px auto 0;
-    border-radius: 5px;
-}
-
-.page-content {
-    width: 100%;
-    max-width: 500px;
-    background-color: white;
-    border-radius: 10px;
-    padding: 30px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.form-container {
-    display: flex;
-    flex-direction: column;
-}
-
-.input-container {
-    margin-bottom: 20px;
-}
-
-.input-container label {
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 5px;
-}
-
-.input-container input {
-    padding: 10px;
-    font-size: 14px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    width: 100%;
+    padding: 20px;
     box-sizing: border-box;
+    border-radius: 8px;
 }
 
-.input-container input:focus {
-    border-color: #007bff;
-    outline: none;
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.buttonPress {
-    padding: 12px 20px;
-    background-color: #007bff;
+.PageContentContainer {
+    width: 100%;
+    max-width: 1200px;
+    margin-top: 20px;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+    /* Impede que o conteúdo saia da tela */
+    padding-bottom: 80px;
+    /* Garante que o conteúdo não fique escondido atrás do botão */
+}
+
+.project-card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: calc(33% - 20px);
+    margin-right: 15px;
+    margin-bottom: 15px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.project-details {
+    margin-bottom: 15px;
+}
+
+.project-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.buttonPress,
+.buttonEdit,
+.buttonDelete,
+.buttonLogout {
+    padding: 10px 20px;
+    background-color: #03A688;
     color: white;
-    font-size: 16px;
-    font-weight: bold;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s;
-    width: 100%;
-    box-sizing: border-box;
 }
 
-.buttonPress:hover {
+.buttonPress:hover,
+.buttonEdit:hover,
+.buttonDelete:hover,
+.buttonLogout:hover {
     background-color: #0056b3;
 }
 
-.buttonPress:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
+.buttonPress {
+    width: 100%;
+    text-align: center;
+    background-color: #007bff;
 }
 
-.login-link {
+.buttonLogout {
+    background-color: #dc3545;
+}
+
+.buttonLogout:hover {
+    background-color: #c82333;
+}
+
+.button-container {
+    margin-top: 30px;
     text-align: center;
+}
+
+.project-actions button {
+    background-color: #28a745;
+}
+
+.project-actions button:hover {
+    background-color: #218838;
+}
+
+.task-list {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    height: auto;
+    /* Deixa a altura das tarefas adaptável */
+    max-height: 300px;
+    /* Limita a altura máxima para evitar que as tarefas saiam da tela */
+    overflow-y: auto;
+    /* Adiciona scroll caso o conteúdo ultrapasse o limite */
+}
+
+.task-item {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.task-item p {
+    margin: 0;
+}
+
+.no-projects-message {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
     margin-top: 20px;
 }
 
-.login-link a {
+.no-projects-message span {
     color: #007bff;
-    text-decoration: none;
-    font-weight: bold;
 }
 
-.login-link a:hover {
-    text-decoration: underline;
+/* Fixando o botão de "Cadastrar novo projeto" no canto inferior direito */
+.button-container {
+    margin-top: 20px;
+    position: fixed;
+    /* Fixa o botão na parte inferior */
+    bottom: 20px;
+    /* Distância do rodapé */
+    right: 20px;
+    /* Posiciona à direita */
+    width: auto;
+    /* Largura automática para o botão */
+    max-width: 250px;
+    /* Limita a largura máxima do botão */
 }
 
-.error-message {
-    color: red;
-    font-size: 14px;
-    margin-bottom: 15px;
-    text-align: center;
-}
-
-.password-requirements {
-    list-style-type: none;
-    padding-left: 0;
-    margin-top: 10px;
-}
-
-.password-requirements li {
-    color: red;
-    font-size: 14px;
-}
-
-.password-requirements li.valid {
-    color: green;
-}
-
-.success-message {
-    color: green;
-    font-size: 16px;
-    text-align: center;
-    margin-bottom: 15px;
+.buttonPress {
+    background-color: #007bff;
+    /* Mantém a cor azul do botão */
 }

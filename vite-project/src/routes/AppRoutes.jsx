@@ -5,6 +5,7 @@ import EditProjeto from '../pages/EditProjeto';
 import Login from '../pages/SignIn';
 import SignUp from '../pages/SignUp';
 import PrivateRoute from './PrivateRoute';
+import NotAuthenticated from '../pages/NotAuthenticated/NotAuthenticated';
 
 export default function AppRoutes() {
     return (
@@ -14,6 +15,7 @@ export default function AppRoutes() {
             <Route path="/EditProjeto:id" element={<PrivateRoute><EditProjeto /></PrivateRoute>} />
             <Route path="/Login" element={<Login />} />
             <Route path="/SignUp" element={<SignUp />} />
+            <Route path="/not-authenticated" element={<NotAuthenticated />} />
         </Routes>
     );
 }

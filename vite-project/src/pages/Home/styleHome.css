@@ -1,0 +1,122 @@
+.PageContainer {
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: #f4f7fc;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+.PageHeaderContainer {
+    width: 100%;
+    background-color: #013d32;
+    color: white;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.PageContentContainer {
+    width: 100%;
+    max-width: 800px;
+    margin-top: 20px;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.project-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.project-details {
+    margin-bottom: 15px;
+}
+
+.project-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.buttonPress,
+.buttonEdit,
+.buttonDelete,
+.buttonLogout {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.buttonPress:hover,
+.buttonEdit:hover,
+.buttonDelete:hover,
+.buttonLogout:hover {
+    background-color: #0056b3;
+}
+
+.buttonPress {
+    width: 100%;
+    text-align: center;
+}
+
+.buttonLogout {
+    background-color: #dc3545;
+}
+
+.buttonLogout:hover {
+    background-color: #c82333;
+}
+
+.button-container {
+    margin-top: 20px;
+}
+
+.project-actions button {
+    background-color: #28a745;
+}
+
+.project-actions button:hover {
+    background-color: #218838;
+}
+
+.task-list {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.task-item {
+    margin-bottom: 10px;
+}
+
+.task-item p {
+    margin: 0;
+}
+
+.no-projects-message {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
+    margin-top: 20px;
+}
+
+.no-projects-message span {
+    color: #007bff;
+}

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './style.css';
+import './styleEdit.css';
 
 export default function CadastroProjeto() {
     const [titulo, setTitulo] = useState('');

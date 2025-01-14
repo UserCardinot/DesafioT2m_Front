@@ -2,14 +2,6 @@ body {
     font-family: "Source Sans 3", sans-serif !important;
 }
 
-.sidebar {
-    width: 200px;
-    background-color: var(--sidebar-background);
-    padding: 20px;
-    position: fixed;
-    height: 100%;
-}
-
 *,
 *:after,
 *:before {

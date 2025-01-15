@@ -24,15 +24,16 @@ const CadastroProjeto = () => {
         setTarefas(novasTarefas);
     };
 
-    const formatDateToYYYYMMDD = (date) => {
+    // Função para formatar a data para dd-MM-yyyy
+    const formatDateToDDMMYYYY = (date) => {
         const formattedDate = new Date(date);
-        const year = formattedDate.getFullYear();
-        const month = (formattedDate.getMonth() + 1).toString().padStart(2, '0');
         const day = formattedDate.getDate().toString().padStart(2, '0');
-        return `${year}-${month}-${day}`;  // Formato esperado: YYYY-MM-DD
+        const month = (formattedDate.getMonth() + 1).toString().padStart(2, '0');
+        const year = formattedDate.getFullYear();
+        return `${day}-${month}-${year}`;  // Formato esperado: dd-MM-yyyy
     };
 
-    const prazoFormatado = dataEntrega ? formatDateToYYYYMMDD(dataEntrega) : null;
+    const prazoFormatado = dataEntrega ? formatDateToDDMMYYYY(dataEntrega) : null;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -45,9 +46,16 @@ const CadastroProjeto = () => {
         }
 
         const token = localStorage.getItem('token');
-
         if (!token) {
             console.log('Token não encontrado');
+            return;
+        }
+
+        // Validar tarefas para garantir que estão completas antes de enviar
+        const tarefasValidas = tarefas.filter(tarefa => tarefa.descricao.trim() !== "" && tarefa.prazo !== "");
+
+        if (tarefasValidas.length === 0) {
+            alert("Pelo menos uma tarefa deve ser preenchida.");
             return;
         }
 
@@ -58,9 +66,9 @@ const CadastroProjeto = () => {
                     Nome: nome,
                     Descricao: descricao2,
                     Prazo: prazoFormatado,
-                    Tarefas: tarefas.map((tarefa) => ({
+                    Tarefas: tarefasValidas.map((tarefa) => ({
                         Descricao: tarefa.descricao.trim(),
-                        Prazo: tarefa.prazo ? formatDateToYYYYMMDD(tarefa.prazo) : null,
+                        Prazo: tarefa.prazo ? formatDateToDDMMYYYY(tarefa.prazo) : null,
                         Status: tarefa.status || "Pendente"
                     }))
                 },
@@ -72,11 +80,13 @@ const CadastroProjeto = () => {
                 }
             );
             console.log("Projeto cadastrado com sucesso:", response.data);
+            alert("Projeto cadastrado com sucesso!");
         } catch (error) {
             console.error('Erro ao cadastrar o projeto:', error.response?.data || error);
-            alert("Ocorreu um erro ao cadastrar o projeto. Tente novamente.");
+            alert(`Erro ao cadastrar o projeto: ${error.response?.data.errors || error}`);
         }
     };
+
 
     return (
         <form onSubmit={handleSubmit}>

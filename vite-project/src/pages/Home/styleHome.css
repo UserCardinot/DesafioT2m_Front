@@ -36,7 +36,6 @@
     flex-wrap: wrap;
     justify-content: space-between;
     position: relative;
-    /* Para o botão de cadastrar ficar fixo dentro dessa área */
 }
 
 .project-card {
@@ -47,7 +46,6 @@
     margin-bottom: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: calc(33% - 20px);
-    /* Faz cada cartão ocupar 33% da largura da tela */
     margin-right: 15px;
     margin-bottom: 15px;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -118,11 +116,8 @@
     margin-top: 10px;
     margin-bottom: 15px;
     height: auto;
-    /* Deixa a altura das tarefas adaptável */
     max-height: 300px;
-    /* Limita a altura máxima para evitar que as tarefas saiam da tela */
     overflow-y: auto;
-    /* Adiciona scroll caso o conteúdo ultrapasse o limite */
 }
 
 .task-item {
@@ -148,23 +143,16 @@
     color: #007bff;
 }
 
-/* Fixando o botão de "Cadastrar novo projeto" no rodapé */
 .button-container {
     margin-top: 20px;
     position: fixed;
-    /* Fixa o botão na parte inferior */
     bottom: 20px;
-    /* Distância do rodapé */
     left: 50%;
     transform: translateX(-50%);
-    /* Centraliza o botão */
     width: 90%;
-    /* Garante que o botão tenha um tamanho adequado */
     max-width: 400px;
-    /* Limita a largura máxima do botão */
 }
 
 .buttonPress {
     background-color: #007bff;
-    /* Mantém a cor azul do botão */
 }

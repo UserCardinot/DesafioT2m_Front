@@ -12,7 +12,7 @@ export default function AppRoutes() {
         <Routes>
             <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
             <Route path="/Cadastro" element={<PrivateRoute><Cadastro /></PrivateRoute>} />
-            <Route path="/EditProjeto:id" element={<PrivateRoute><EditProjeto /></PrivateRoute>} />
+            <Route path="/EditProjeto/:id" element={<PrivateRoute><EditProjeto /></PrivateRoute>} />
             <Route path="/Login" element={<Login />} />
             <Route path="/SignUp" element={<SignUp />} />
             <Route path="/not-authenticated" element={<NotAuthenticated />} />

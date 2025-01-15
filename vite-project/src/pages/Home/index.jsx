@@ -15,35 +15,24 @@ export default function Home() {
             try {
                 const token = localStorage.getItem('token');
                 if (!token) {
-                    console.log('Token não encontrado no localStorage');
                     alert('Você precisa estar logado para visualizar os projetos.');
-                    return; // Não redireciona, apenas exibe o alerta
+                    return;
                 }
 
-                // Iniciando requisição
-                console.log('Iniciando a requisição para obter projetos');
                 const response = await axios.get(apiUrl, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
 
-                // Logando a resposta para verificar a estrutura de dados
-                console.log('Resposta recebida:', response.data);
-
-                // Verificando e acessando a chave $values na resposta
                 if (response.data && response.data.$values) {
-                    console.log('Projetos encontrados:', response.data.$values);
-                    setProjetos(response.data.$values); // Atualizando o estado com os projetos
-                } else {
-                    console.log('Estrutura de dados inesperada:', response.data);
+                    setProjetos(response.data.$values);
                 }
             } catch (error) {
                 console.error('Erro ao carregar os projetos:', error);
                 if (error.response) {
                     if (error.response.status === 401 || error.response.status === 403) {
                         alert('Sessão expirada ou não autorizada. Por favor, faça login novamente.');
-                        // Remover o token para evitar problemas de autenticação futura
                         localStorage.removeItem('token');
                     } else {
                         const errorMessage = error.response.data?.message || 'Erro desconhecido';
@@ -69,7 +58,7 @@ export default function Home() {
     };
 
     const handleEditar = (id) => {
-        navigate(`/EditarProjeto/${id}`);
+        navigate(`/EditProjeto/${id}`);
     };
 
     const handleExcluir = async (id) => {
@@ -104,7 +93,11 @@ export default function Home() {
         <div className='PageContainer'>
             <div className='PageHeaderContainer'>
                 <div className="header-content">
+
                     <h1>Projetos Cadastrados</h1>
+                    <button onClick={handleCadastrar} className="buttonCadastrar">
+                        Cadastrar Novo Projeto
+                    </button>
                     <button onClick={handleLogout} className="buttonLogout">
                         Logout
                     </button>
@@ -158,16 +151,6 @@ export default function Home() {
                 ) : (
                     <p>Não há projetos cadastrados.</p>
                 )}
-            </div>
-
-            <div className="button-container">
-                <button
-                    aria-label="Cadastrar novo projeto"
-                    onClick={handleCadastrar}
-                    className="buttonPress"
-                >
-                    <span>Cadastrar novo projeto</span>
-                </button>
             </div>
         </div>
     );

@@ -1,21 +1,24 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
 import './styleEdit.css';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 
-export default function CadastroProjeto() {
+export default function EditProjeto() {
+    const { id } = useParams();
     const [titulo, setTitulo] = useState('');
     const [descricao, setDescricao] = useState('');
     const [dataEntrega, setDataEntrega] = useState('');
-    const [tarefas, setTarefas] = useState(['']);
+    const [tarefas, setTarefas] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleAdicionarTarefa = () => {
-        setTarefas([...tarefas, '']);
+        setTarefas([...tarefas, { nome: '', descricao: '', dataPrazo: '', status: '' }]);
     };
 
-    const handleTarefaChange = (index, value) => {
+    const handleTarefaChange = (index, field, value) => {
         const novasTarefas = [...tarefas];
-        novasTarefas[index] = value;
+        novasTarefas[index][field] = value;
         setTarefas(novasTarefas);
     };
 
@@ -24,69 +27,137 @@ export default function CadastroProjeto() {
         setTarefas(novasTarefas);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log({ titulo, descricao, dataEntrega, tarefas });
-        navigate('/');
+
+        const prazoFormatado = new Date(dataEntrega).toISOString().split('T')[0];
+
+        const tarefaIds = tarefas.map(tarefa => tarefa.id || null).filter(id => id);
+
+        console.log('Projeto a ser enviado para o backend:', {
+            id,
+            nome: titulo,
+            descricao,
+            prazo: prazoFormatado,
+            userId: '019466cd-b568-70ff-970e-9aed45a076b9',
+            tarefaIds,
+        });
+
+        try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                alert('Você precisa estar logado para editar o projeto.');
+                return;
+            }
+
+            const response = await axios.put(`https://localhost:7192/api/projeto/${id}`, {
+                id,
+                nome: titulo,
+                descricao,
+                prazo: prazoFormatado,
+                userId: '019466cd-b568-70ff-970e-9aed45a076b9',
+                tarefaIds, // Envia apenas os IDs das tarefas
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            alert('Projeto editado com sucesso!');
+            navigate(`/`);
+        } catch (error) {
+            console.error('Erro ao editar o projeto:', error);
+            alert(`Erro ao editar o projeto: ${error.message}`);
+        }
     };
 
     return (
         <div className='PageContainer'>
             <div className='PageHeaderContainer'>
-                Editação de Projeto
+                <div className="header-content">
+                    <h1>Editação de Projeto</h1>
+                </div>
             </div>
+
             <form className='PageContentContainer' onSubmit={handleSubmit}>
                 <div className='form-group'>
-                    <label htmlFor='titulo'>Título do Projeto:</label>
+                    <label>Nome do Projeto:</label>
                     <input
-                        type='text'
-                        id='titulo'
+                        type="text"
                         value={titulo}
                         onChange={(e) => setTitulo(e.target.value)}
+                        placeholder="Nome do Projeto"
                         required
                     />
                 </div>
+
                 <div className='form-group'>
-                    <label htmlFor='descricao'>Descrição:</label>
+                    <label>Descrição do Projeto:</label>
                     <textarea
-                        id='descricao'
                         value={descricao}
                         onChange={(e) => setDescricao(e.target.value)}
+                        placeholder="Descrição do Projeto"
                         required
                     />
                 </div>
+
                 <div className='form-group'>
-                    <label htmlFor='dataEntrega'>Data de Entrega:</label>
+                    <label>Data de Entrega:</label>
                     <input
-                        type='date'
-                        id='dataEntrega'
+                        type="date"
                         value={dataEntrega}
                         onChange={(e) => setDataEntrega(e.target.value)}
                         required
                     />
                 </div>
+
+                {/* Tarefas do Projeto */}
                 <div className='form-group'>
                     <label>Tarefas:</label>
                     <div className='tarefas-container'>
-                        {tarefas.map((tarefa, index) => (
-                            <div key={index} className='tarefa-input'>
-                                <input
-                                    type='text'
-                                    value={tarefa}
-                                    onChange={(e) => handleTarefaChange(index, e.target.value)}
-                                    placeholder={`Tarefa ${index + 1}`}
-                                    required
-                                />
-                                <button type='button' className='remove-task' onClick={() => handleRemoverTarefa(index)}>
-                                    &times; {/* Símbolo "X" */}
-                                </button>
-                            </div>
-                        ))}
+                        {tarefas.length > 0 ? (
+                            tarefas.map((tarefa, index) => {
+                                return (
+                                    <div key={index} className='tarefa-input'>
+                                        <input
+                                            type='text'
+                                            value={tarefa.nome}
+                                            onChange={(e) => handleTarefaChange(index, 'nome', e.target.value)}
+                                            placeholder={`Nome da Tarefa ${index + 1}`}
+                                            required
+                                        />
+                                        <textarea
+                                            value={tarefa.descricao}
+                                            onChange={(e) => handleTarefaChange(index, 'descricao', e.target.value)}
+                                            placeholder={`Descrição da Tarefa ${index + 1}`}
+                                        />
+                                        <input
+                                            type='date'
+                                            value={tarefa.dataPrazo}
+                                            onChange={(e) => handleTarefaChange(index, 'dataPrazo', e.target.value)}
+                                        />
+                                        <input
+                                            type='text'
+                                            value={tarefa.status}
+                                            onChange={(e) => handleTarefaChange(index, 'status', e.target.value)}
+                                            placeholder={`Status da Tarefa ${index + 1}`}
+                                        />
+                                        <button type='button' className='remove-task' onClick={() => handleRemoverTarefa(index)}>
+                                            &times; {/* Símbolo "X" */}
+                                        </button>
+                                    </div>
+                                );
+                            })
+                        ) : (
+                            <p>Não há tarefas cadastradas para este projeto.</p>
+                        )}
                         <button type='button' onClick={handleAdicionarTarefa}>
                             Adicionar Tarefa
                         </button>
                     </div>
                 </div>
+
                 <button type='submit' className='buttonPress'>
                     Editar Projeto
                 </button>

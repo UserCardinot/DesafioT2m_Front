@@ -5,7 +5,7 @@ import axios from 'axios';
 
 export default function Home() {
     const [projetos, setProjetos] = useState([]);
-    const [isLoading, setIsLoading] = useState(true); // Estado de carregamento
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -46,7 +46,7 @@ export default function Home() {
                     alert(`Erro na requisição: ${error.message}`);
                 }
             } finally {
-                setIsLoading(false); // Atualiza o estado de carregamento
+                setIsLoading(false);
             }
         };
 
@@ -81,19 +81,17 @@ export default function Home() {
     };
 
     const formatarData = (data) => {
-        // Tentando formatar a data caso seja válida
         const date = new Date(data);
-        if (isNaN(date)) {
-            return 'Data não definida'; // Retorna caso não seja uma data válida
+        if (isNaN(date.getTime())) {
+            return 'Data não definida';
         }
-        return date.toLocaleDateString('pt-BR'); // Retorna a data formatada no formato brasileiro
+        return date.toLocaleDateString('pt-BR');
     };
 
     return (
         <div className='PageContainer'>
             <div className='PageHeaderContainer'>
                 <div className="header-content">
-
                     <h1>Projetos Cadastrados</h1>
                     <button onClick={handleCadastrar} className="buttonCadastrar">
                         Cadastrar Novo Projeto
@@ -104,16 +102,16 @@ export default function Home() {
                 </div>
             </div>
 
-            <div className='PageContentContainer'>
+            <div className="PageContentContainer">
                 {isLoading ? (
-                    <p>Carregando projetos...</p> // Exibe "Carregando projetos..." enquanto os dados estão sendo carregados
+                    <p>Carregando projetos...</p>
                 ) : projetos.length > 0 ? (
                     projetos.map(projeto => (
                         <div className="project-card" key={projeto.id}>
                             <div className="project-details">
                                 <h3>{projeto.nome}</h3>
                                 <p>{projeto.descricao}</p>
-                                <p><strong>Prazo:</strong> {formatarData(projeto.prazo)}</p>
+                                <p><strong>Prazo do Projeto:</strong> {projeto.prazo}</p>
                             </div>
 
                             <div className="task-list">
@@ -128,7 +126,7 @@ export default function Home() {
                                         </div>
                                     ))
                                 ) : (
-                                    <p>Sem tarefas associadas.</p> // Exibe a mensagem quando não houver tarefas
+                                    <p>Sem tarefas associadas.</p>
                                 )}
                             </div>
 
@@ -152,6 +150,7 @@ export default function Home() {
                     <p>Não há projetos cadastrados.</p>
                 )}
             </div>
+
         </div>
     );
 }

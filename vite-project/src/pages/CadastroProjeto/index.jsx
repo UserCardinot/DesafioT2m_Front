@@ -88,6 +88,7 @@ const CadastroProjeto = () => {
 
     return (
         <form onSubmit={handleSubmit}>
+            <button onClick={() => navigate('/')}>Voltar</button>
             <h3>Cadastro de Projeto</h3>
 
             {successMessage && <p className="success-message">{successMessage}</p>}

@@ -34,15 +34,6 @@ export default function EditProjeto() {
 
         const tarefaIds = tarefas.map(tarefa => tarefa.id || null).filter(id => id);
 
-        console.log('Projeto a ser enviado para o backend:', {
-            id,
-            nome: titulo,
-            descricao,
-            prazo: prazoFormatado,
-            userId: '019466cd-b568-70ff-970e-9aed45a076b9',
-            tarefaIds,
-        });
-
         try {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -73,15 +64,16 @@ export default function EditProjeto() {
     };
 
     return (
-        <div className='PageContainer'>
-            <div className='PageHeaderContainer'>
-                <div className="header-content">
+        <div className='PageContainerEdit'>
+            <div className='PageHeaderContainerEdit'>
+                <button onClick={() => navigate('/')}>Voltar</button>
+                <div className="header-content-edit">
                     <h1>Edição de Projeto</h1>
                 </div>
             </div>
 
-            <form className='PageContentContainer' onSubmit={handleSubmit}>
-                <div className='form-group'>
+            <form className='PageContentContainerEdit' onSubmit={handleSubmit}>
+                <div className='form-group-edit'>
                     <label>Nome do Projeto:</label>
                     <input
                         type="text"
@@ -92,7 +84,7 @@ export default function EditProjeto() {
                     />
                 </div>
 
-                <div className='form-group'>
+                <div className='form-group-edit'>
                     <label>Descrição do Projeto:</label>
                     <textarea
                         value={descricao}
@@ -102,7 +94,7 @@ export default function EditProjeto() {
                     />
                 </div>
 
-                <div className='form-group'>
+                <div className='form-group-edit'>
                     <label>Data de Entrega:</label>
                     <input
                         type="date"
@@ -113,13 +105,13 @@ export default function EditProjeto() {
                 </div>
 
                 {/* Tarefas do Projeto */}
-                <div className='form-group'>
+                <div className='form-group-edit'>
                     <label>Tarefas:</label>
-                    <div className='tarefas-container'>
+                    <div className='tarefas-container-edit'>
                         {tarefas.length > 0 ? (
                             tarefas.map((tarefa, index) => {
                                 return (
-                                    <div key={index} className='tarefa-input'>
+                                    <div key={index} className='tarefa-input-edit'>
                                         <input
                                             type='text'
                                             value={tarefa.nome}
@@ -143,8 +135,8 @@ export default function EditProjeto() {
                                             onChange={(e) => handleTarefaChange(index, 'status', e.target.value)}
                                             placeholder={`Status da Tarefa ${index + 1}`}
                                         />
-                                        <button type='button' className='remove-task' onClick={() => handleRemoverTarefa(index)}>
-                                            &times; {/* Símbolo "X" */}
+                                        <button type='button' className='remove-task-edit' onClick={() => handleRemoverTarefa(index)}>
+                                            &times;
                                         </button>
                                     </div>
                                 );
@@ -152,13 +144,13 @@ export default function EditProjeto() {
                         ) : (
                             <p>Não há tarefas cadastradas para este projeto.</p>
                         )}
-                        <button type='button' onClick={handleAdicionarTarefa}>
+                        <button type='button' onClick={handleAdicionarTarefa} className="buttonAdicionarTarefaEdit">
                             Adicionar Tarefa
                         </button>
                     </div>
                 </div>
 
-                <button type='submit' className='buttonPress'>
+                <button type='submit' className='buttonPressEdit'>
                     Editar Projeto
                 </button>
             </form>

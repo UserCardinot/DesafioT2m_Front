@@ -8,31 +8,38 @@ export default function EditProjeto() {
     const [titulo, setTitulo] = useState('');
     const [descricao, setDescricao] = useState('');
     const [dataEntrega, setDataEntrega] = useState('');
-    const [tarefas, setTarefas] = useState([]);
+    const [tarefas, setTarefas] = useState([]);  // Garante que seja um array
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
+    // Função para adicionar uma tarefa vazia
     const handleAdicionarTarefa = () => {
-        setTarefas([...tarefas, { nome: '', descricao: '', dataPrazo: '', status: '' }]);
+        setTarefas([
+            ...tarefas,
+            { nome: '', descricao: '', dataPrazo: '', status: '' }
+        ]);
     };
 
+    // Função para atualizar a tarefa no índice correto
     const handleTarefaChange = (index, field, value) => {
         const novasTarefas = [...tarefas];
         novasTarefas[index][field] = value;
         setTarefas(novasTarefas);
     };
 
+    // Função para remover uma tarefa pelo índice
     const handleRemoverTarefa = (index) => {
         const novasTarefas = tarefas.filter((_, i) => i !== index);
         setTarefas(novasTarefas);
     };
 
+    // Função para enviar os dados para o backend
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const prazoFormatado = new Date(dataEntrega).toISOString().split('T')[0];
-
-        const tarefaIds = tarefas.map(tarefa => tarefa.id || null).filter(id => id);
+        // Formatação da data no formato DD-MM-YYYY
+        const [ano, mes, dia] = dataEntrega.split('-');
+        const prazoFormatado = `${dia}-${mes}-${ano}`;
 
         try {
             const token = localStorage.getItem('token');
@@ -42,12 +49,10 @@ export default function EditProjeto() {
             }
 
             const response = await axios.put(`https://localhost:7192/api/projeto/${id}`, {
-                id,
                 nome: titulo,
                 descricao,
                 prazo: prazoFormatado,
-                userId: '019466cd-b568-70ff-970e-9aed45a076b9',
-                tarefaIds, // Envia apenas os IDs das tarefas
+                tarefas: tarefas, // Envia as tarefas corretamente
             }, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -62,6 +67,26 @@ export default function EditProjeto() {
             alert(`Erro ao editar o projeto: ${error.message}`);
         }
     };
+
+    // Função para carregar o projeto
+    useEffect(() => {
+        const fetchProjeto = async () => {
+            try {
+                const response = await axios.get(`https://localhost:7192/api/projeto/${id}`);
+                const projeto = response.data;
+
+                // Certifique-se de que 'tarefas' seja um array
+                setTitulo(projeto.nome);
+                setDescricao(projeto.descricao);
+                setDataEntrega(projeto.prazo);
+                setTarefas(Array.isArray(projeto.tarefas) ? projeto.tarefas : []);  // Garante que seja um array
+            } catch (error) {
+                console.error('Erro ao buscar o projeto:', error);
+            }
+        };
+
+        fetchProjeto();
+    }, [id]);
 
     return (
         <div className='PageContainerEdit'>

@@ -76,7 +76,7 @@ export default function EditProjeto() {
         <div className='PageContainer'>
             <div className='PageHeaderContainer'>
                 <div className="header-content">
-                    <h1>Editação de Projeto</h1>
+                    <h1>Edição de Projeto</h1>
                 </div>
             </div>
 

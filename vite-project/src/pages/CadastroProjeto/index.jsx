@@ -1,15 +1,18 @@
 import { useState } from "react";
 import axios from "axios";
 import "./styleCadPro.css";
+import { useNavigate } from "react-router-dom";
 
 const CadastroProjeto = () => {
     const [titulo, setTitulo] = useState("");
     const [descricao, setDescricao] = useState("");
     const [dataEntrega, setDataEntrega] = useState("");
-    const [tarefas, setTarefas] = useState([{ descricao: "", prazo: "", status: "" }]);
+    const [tarefas, setTarefas] = useState([{ descricao: "", prazo: "", status: "", nome: "" }]);
+    const [successMessage, setSuccessMessage] = useState('');
+    const navigate = useNavigate();
 
     const adicionarTarefa = () => {
-        setTarefas([...tarefas, { descricao: "", prazo: "", status: "" }]);
+        setTarefas([...tarefas, { descricao: "", prazo: "", status: "", nome: "" }]);
     };
 
     const removerTarefa = (index) => {
@@ -24,13 +27,12 @@ const CadastroProjeto = () => {
         setTarefas(novasTarefas);
     };
 
-    // Função para formatar a data para dd-MM-yyyy
     const formatDateToDDMMYYYY = (date) => {
         const formattedDate = new Date(date);
         const day = formattedDate.getDate().toString().padStart(2, '0');
         const month = (formattedDate.getMonth() + 1).toString().padStart(2, '0');
         const year = formattedDate.getFullYear();
-        return `${day}-${month}-${year}`;  // Formato esperado: dd-MM-yyyy
+        return `${day}-${month}-${year}`;
     };
 
     const prazoFormatado = dataEntrega ? formatDateToDDMMYYYY(dataEntrega) : null;
@@ -51,13 +53,12 @@ const CadastroProjeto = () => {
             return;
         }
 
-        // Validar tarefas para garantir que estão completas antes de enviar
-        const tarefasValidas = tarefas.filter(tarefa => tarefa.descricao.trim() !== "" && tarefa.prazo !== "");
-
-        if (tarefasValidas.length === 0) {
-            alert("Pelo menos uma tarefa deve ser preenchida.");
-            return;
-        }
+        const tarefasValidas = tarefas.map((tarefa, index) => ({
+            Descricao: tarefa.descricao.trim(),
+            Prazo: tarefa.prazo ? formatDateToDDMMYYYY(tarefa.prazo) : null,
+            Status: tarefa.status || "Pendente",
+            Nome: tarefa.nome || `Tarefa ${index + 1}`  // Atribuindo o nome baseado no índice
+        }));
 
         try {
             const response = await axios.post(
@@ -66,11 +67,7 @@ const CadastroProjeto = () => {
                     Nome: nome,
                     Descricao: descricao2,
                     Prazo: prazoFormatado,
-                    Tarefas: tarefasValidas.map((tarefa) => ({
-                        Descricao: tarefa.descricao.trim(),
-                        Prazo: tarefa.prazo ? formatDateToDDMMYYYY(tarefa.prazo) : null,
-                        Status: tarefa.status || "Pendente"
-                    }))
+                    Tarefas: tarefasValidas
                 },
                 {
                     headers: {
@@ -79,18 +76,21 @@ const CadastroProjeto = () => {
                     }
                 }
             );
-            console.log("Projeto cadastrado com sucesso:", response.data);
-            alert("Projeto cadastrado com sucesso!");
+            setSuccessMessage("Projeto cadastrado com sucesso!");
+            setTimeout(() => {
+                navigate('/');
+            }, 3000);
         } catch (error) {
             console.error('Erro ao cadastrar o projeto:', error.response?.data || error);
             alert(`Erro ao cadastrar o projeto: ${error.response?.data.errors || error}`);
         }
     };
 
-
     return (
         <form onSubmit={handleSubmit}>
             <h3>Cadastro de Projeto</h3>
+
+            {successMessage && <p className="success-message">{successMessage}</p>}
 
             <div>
                 <label htmlFor="titulo">Nome do Projeto:</label>
@@ -153,6 +153,15 @@ const CadastroProjeto = () => {
                             type="text"
                             value={tarefa.status}
                             onChange={(e) => atualizarTarefa(index, "status", e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label>Nome da Tarefa:</label>
+                        <input
+                            type="text"
+                            value={tarefa.nome || `Tarefa ${index + 1}`}  // Preenche o nome automaticamente com base no índice
+                            onChange={(e) => atualizarTarefa(index, "nome", e.target.value)}
                             required
                         />
                     </div>
